@@ -79,4 +79,4 @@ The proposed later model is an ImageNet-pretrained ResNet18 with its final layer
 
 ## Team
 
-Current project owner: Muhammad Ammar Sohail (student ID 202356790). The second teammate will be added to the proposal once their name and student ID are confirmed; their GitHub handle is `mkamaleldin7`.
+Current project owner: Muhammad Ammar Sohail (student ID 202356790). The second teammate: Mohamed Kamaleldin (student ID 202338790)
