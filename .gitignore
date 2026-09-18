@@ -1,0 +1,18 @@
+.DS_Store
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Local dataset files are not committed.
+data/koniq/images/
+data/koniq/*.zip
+data/koniq/*.tar*
+data/koniq/metadata/*.csv
+
+# Local scratch and generated audit data can be regenerated.
+work/
+tmp/
+outputs/
+figures/*.json
+figures/*.csv
