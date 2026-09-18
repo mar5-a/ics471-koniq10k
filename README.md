@@ -1,6 +1,4 @@
 <div align="center">
-  <img src="assets/kfupm_logo.png" width="420" alt="King Fahd University of Petroleum and Minerals">
-
   <h1>koniq 10k image quality assessment</h1>
   <h2>ICS 471</h2>
   <p>deep learning course project · milestone 1</p>
@@ -86,7 +84,7 @@ proposal/proposal.pdf                 final 2 to 3 page proposal
 notebooks/01_koniq_audit.ipynb        reproducible inspection notebook
 src/audit_koniq.py                    audit and figure generation code
 figures/                               generated plots and audit tables
-assets/kfupm_logo.png                 report and README branding
+assets/kfupm_logo.png                 proposal PDF branding
 data/README.md                        download and local data layout
 requirements.txt                      audit only Python dependencies
 ```
