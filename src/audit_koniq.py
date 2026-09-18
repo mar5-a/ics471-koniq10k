@@ -130,8 +130,8 @@ def plot_representatives(
                 ax.text(0.5, 0.5, f"Unreadable\n{exc}", ha="center", va="center")
                 ax.set_facecolor("#F3F4F6")
         ax.axis("off")
-    fig.suptitle("Representative KonIQ-10k images across the released MOS range", fontsize=15, y=0.98)
-    fig.text(0.5, 0.02, "MOS is the released 0-100 target; lower values indicate lower perceived technical quality.",
+    fig.suptitle("Representative KonIQ 10k images across the released MOS range", fontsize=15, y=0.98)
+    fig.text(0.5, 0.02, "MOS is the released 0 to 100 target; lower values indicate lower perceived technical quality.",
              ha="center", fontsize=9, color="#4B5563")
     fig.tight_layout(rect=(0, 0.04, 1, 0.95))
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
@@ -149,7 +149,7 @@ def plot_mos_distribution(metadata: pd.DataFrame, output_path: str | Path) -> No
     ax.axvline(mean, color="#111827", linestyle="--", linewidth=1.6, label=f"Mean {mean:.1f}")
     ax.axvline(median, color="#D95F59", linestyle=":", linewidth=2.0, label=f"Median {median:.1f}")
     ax.set_title("Distribution of released mean opinion scores (MOS)", fontsize=15, pad=12)
-    ax.set_xlabel("Released MOS (0-100 scale)")
+    ax.set_xlabel("Released MOS (0 to 100 scale)")
     ax.set_ylabel("Number of images")
     ax.grid(axis="y", alpha=0.18)
     ax.legend(frameon=False)
@@ -172,7 +172,7 @@ def plot_split_summary(metadata: pd.DataFrame, output_path: str | Path) -> None:
     axes[0].grid(axis="y", alpha=0.18)
     axes[1].bar(labels, summary["mean_mos"], color=["#4F46E5", "#D99A29", "#2A9D8F"][: len(labels)])
     axes[1].set_title("Mean released MOS by split")
-    axes[1].set_ylabel("MOS (0-100)")
+    axes[1].set_ylabel("MOS (0 to 100)")
     axes[1].grid(axis="y", alpha=0.18)
     fig.tight_layout()
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
@@ -248,7 +248,7 @@ def run_audit(metadata_path: str | Path, images_root: str | Path | None, output_
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--metadata", required=True, help="Path to koniq10k_distributions_sets.csv")
-    parser.add_argument("--images", default=None, help="Directory containing extracted KonIQ-10k images")
+    parser.add_argument("--images", default=None, help="Directory containing extracted KonIQ 10k images")
     parser.add_argument("--output-dir", default="figures", help="Directory for figures and audit tables")
     args = parser.parse_args()
     summary = run_audit(args.metadata, args.images, args.output_dir)

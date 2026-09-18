@@ -16,9 +16,9 @@ def code(text: str):
 def build(output: str | Path = "notebooks/01_koniq_audit.ipynb") -> None:
     cells = [
         md(
-            """# KonIQ-10k Milestone 1 audit
+            """# KonIQ 10k Milestone 1 audit
 
-This notebook supports the course proposal for blind/no-reference image quality assessment. It inspects the released metadata and local image archive, creates the required sample and distribution figures, and records the planned split and validation metric.
+This notebook supports the ICS 471 course proposal for blind or no reference image quality assessment. It inspects the released metadata and local image archive, creates the required sample and distribution figures, and records the planned split and validation metric.
 
 **Scope note:** this notebook intentionally does not train or fine-tune a neural network."""
         ),
@@ -74,7 +74,7 @@ print("Missing metadata values:")
 display(metadata.isna().sum().to_frame("missing"))'''
         ),
         md(
-            """The original ratings use a 1-5 quality scale. The released CSV stores the derived MOS target on a 0-100 scale; this project uses that released numeric target consistently. It is a continuous target, so the task is regression rather than classification."""
+            """The original ratings use a 1 to 5 quality scale. The released CSV stores the derived MOS target on a 0 to 100 scale; this project uses that released numeric target consistently. It is a continuous target, so the task is regression rather than classification."""
         ),
         md("## 2. Required distribution plot"),
         code(
@@ -101,11 +101,11 @@ else:
             """## 4. Pre-registered experimental plan
 
 - **Input:** one RGB photograph from the 512x384 release.
-- **Output:** one continuous MOS prediction on the released 0-100 scale.
+- **Output:** one continuous MOS prediction on the released 0 to 100 scale.
 - **Split:** use the released official split: 7,058 training, 1,000 validation, and 2,015 test images. The test set remains untouched until final evaluation.
 - **Primary validation metric:** Spearman rank correlation (SROCC), which measures agreement between the ordering of predicted and human quality scores.
-- **Planned model:** ImageNet-pretrained ResNet18 with a one-value regression head.
-- **Planned controlled experiments:** frozen versus limited fine-tuning, then 224x224 versus 512x384 input if compute permits.
+- **Planned model:** ImageNet pretrained ResNet18 with a one value regression head.
+- **Planned controlled experiments:** frozen versus limited fine tuning, then 224x224 versus 512x384 input if compute permits.
 
 No training is performed in this milestone notebook."""
         ),

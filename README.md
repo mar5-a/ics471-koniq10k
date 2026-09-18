@@ -1,56 +1,53 @@
-# KonIQ-10k Image Quality Assessment - Milestone 1
+<div align="center">
+  <img src="assets/kfupm_logo.png" width="420" alt="King Fahd University of Petroleum and Minerals">
 
-Proposal-supporting code and artifacts for a deep learning course project on blind/no-reference image quality assessment.
+  <h1>koniq 10k image quality assessment</h1>
+  <h2>ICS 471</h2>
+  <p>deep learning course project · milestone 1</p>
 
-## Project in one sentence
+  <p>
+    <a href="proposal/proposal.pdf">proposal pdf</a> ·
+    <a href="notebooks/01_koniq_audit.ipynb">audit notebook</a> ·
+    <a href="figures/representative_samples.png">sample figure</a>
+  </p>
+</div>
 
-Given one real-world RGB photograph, predict its human-perceived technical quality score without a pristine reference image.
+## what this project is
 
-## Why this project
+we are planning a small image quality experiment using KonIQ 10k. given one real world photograph, the later model will estimate the technical quality that people assigned to it. it will not need a clean reference image, so the task is a no reference image quality problem.
 
-KonIQ-10k is more substantial than a toy image-classification dataset because its images contain authentic, mixed quality issues such as blur, noise, exposure problems, and compression artifacts. At the same time, the course implementation can stay compact: a pretrained CNN with one scalar output is enough for the planned experimental phase.
+this repository is for the first milestone of our ICS 471 course project. it contains the proposal, the dataset checks, and the figures used in the proposal. it does not train or fine tune a model yet.
 
-The first milestone is intentionally limited to dataset inspection and an experimental plan. This repository does not train or fine-tune a model.
+## why we chose it
 
-## Dataset audit
+we wanted a computer vision problem that feels realistic but can still stay manageable for a course project. KonIQ 10k is a good fit because the photographs have natural issues such as blur, noise, poor exposure, and compression. the labels also come from human ratings, which makes the project more interesting than a simple object category task.
 
-The released metadata contains 10,073 images and an official split:
+the planned model is intentionally simple: an ImageNet pretrained ResNet18 with one output value. the main question is whether the model can rank images in roughly the same order as human quality ratings.
 
-| Split | Images |
+## dataset at a glance
+
+| split | images |
 | --- | ---: |
-| Training | 7,058 |
-| Validation | 1,000 |
-| Test | 2,015 |
+| training | 7,058 |
+| validation | 1,000 |
+| test | 2,015 |
 
-The original crowd ratings use a 1-5 quality scale. The released metadata stores the derived MOS target on a 0-100 scale. The audit notebook uses that released MOS consistently; lower values mean lower perceived technical quality. In the current metadata, MOS ranges from 3.91 to 88.39, with mean 58.73 and median 62.35.
+the released metadata has 10,073 labeled images. the original ratings use a 1 to 5 scale, while the released MOS target is stored on a 0 to 100 scale. in the metadata we audited, MOS ranges from 3.91 to 88.39, with a mean of 58.73 and a median of 62.35.
 
-The downloaded archive contains 10,373 image files, while 10,073 have metadata rows and labels. The audit uses the 10,073 matched images and ignores the 300 extra unlisted files.
+the downloaded archive has 10,373 image files. 10,073 match the metadata, and the 300 extra files are ignored. the matched files used by the audit are readable 512x384 RGB images.
 
-The planned validation metric is Spearman rank correlation (SROCC), because image-quality assessment is primarily concerned with whether predicted quality rankings agree with human rankings.
+## what the milestone includes
 
-## Sources and access
+- a short proposal with the problem, target, data description, split, metric, and later experiment plan
+- a notebook that checks the metadata and local image archive
+- a MOS distribution plot, split summary, and real sample image grid
+- simple source code so the checks and figures can be regenerated
 
-- Image archive: [KonIQ-10k on Zenodo](https://zenodo.org/records/19500652) - 512x384 archive, listed as CC BY 4.0, approximately 768 MB.
-- Metadata and authors' reference code: [subpic/koniq](https://github.com/subpic/koniq).
-- Dataset paper: [KonIQ-10k paper](https://arxiv.org/abs/1910.06180).
-- Authors' project files: [OSF project](https://osf.io/hcsdy/).
+the main validation metric will be Spearman rank correlation, or SROCC. this makes sense here because we care about whether predicted quality rankings agree with human rankings. the test set stays untouched until the final evaluation stage.
 
-The raw image archive is not committed to this repository. Individual source images may have attribution requirements in addition to the archive-level license, so the notebook regenerates local figures after download rather than redistributing the image collection.
+## how to reproduce the audit
 
-## Repository layout
-
-```text
-proposal/proposal.pdf                 Final 2-3 page proposal
-notebooks/01_koniq_audit.ipynb        Reproducible inspection notebook
-src/audit_koniq.py                    Audit and figure-generation code
-figures/                               Generated plots and audit tables
-data/README.md                        Download and local data layout
-requirements.txt                      Audit-only Python dependencies
-```
-
-## Reproduce the audit
-
-1. Create an environment and install the audit dependencies:
+1. create an environment and install the small audit dependency set:
 
    ```bash
    uv venv .venv
@@ -58,11 +55,11 @@ requirements.txt                      Audit-only Python dependencies
    uv pip install -r requirements.txt
    ```
 
-2. Download the 512x384 archive from Zenodo and extract its images under `data/koniq/images/`.
+2. download the 512x384 archive from Zenodo and extract the images under `data/koniq/images/`.
 
-3. Put `koniq10k_distributions_sets.csv` under `data/koniq/metadata/`. The notebook can also fetch the metadata from the authors' GitHub repository.
+3. put `koniq10k_distributions_sets.csv` under `data/koniq/metadata/`. the notebook can also fetch the metadata from the authors' repository.
 
-4. Run the notebook or the command-line audit:
+4. run the command line audit:
 
    ```bash
    python src/audit_koniq.py \
@@ -71,12 +68,36 @@ requirements.txt                      Audit-only Python dependencies
      --output-dir figures
    ```
 
-The generated figures include a MOS distribution, split summary, and representative low/middle/high quality image samples.
+or open `notebooks/01_koniq_audit.ipynb` and run the cells after the local data folders are ready.
 
-## Planned modeling scope after Milestone 1
+## sources and access
 
-The proposed later model is an ImageNet-pretrained ResNet18 with its final layer replaced by a one-value regression head. Candidate controlled experiments are frozen features versus limited fine-tuning and 224x224 versus 512x384 input. These are plans only; no training is included in this milestone repository.
+- image archive: [KonIQ 10k on Zenodo](https://zenodo.org/records/19500652), listed as CC BY 4.0
+- metadata and authors' reference code: [subpic/koniq](https://github.com/subpic/koniq)
+- dataset paper: [KonIQ 10k paper](https://arxiv.org/abs/1910.06180)
+- authors' project files: [OSF project](https://osf.io/hcsdy/)
 
-## Team
+the raw image archive is not committed to this repository. individual source photographs may have attribution requirements in addition to the archive level license, so the notebook creates local figures after the data is downloaded.
 
-Current project owner: Muhammad Ammar Sohail (student ID 202356790). The second teammate will be added to the proposal once their name and student ID are confirmed; their GitHub handle is `mkamaleldin7`.
+## repository layout
+
+```text
+proposal/proposal.pdf                 final 2 to 3 page proposal
+notebooks/01_koniq_audit.ipynb        reproducible inspection notebook
+src/audit_koniq.py                    audit and figure generation code
+figures/                               generated plots and audit tables
+assets/kfupm_logo.png                 report and README branding
+data/README.md                        download and local data layout
+requirements.txt                      audit only Python dependencies
+```
+
+## team members
+
+<div align="center">
+
+| name | student id |
+| --- | ---: |
+| Muhammad Ammar Sohail | 202356790 |
+| Mohamed Kamaleldin | 202338790 |
+
+</div>
