@@ -3,7 +3,7 @@
 from pathlib import Path
 
 from reportlab.lib import colors
-from reportlab.lib.enums import TA_CENTER, TA_LEFT
+from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch
@@ -39,11 +39,15 @@ def make_styles():
     ))
     styles.add(ParagraphStyle(
         name="CourseCode", parent=styles["Normal"], fontName="Helvetica-Bold",
-        fontSize=18, leading=19, textColor=NAVY, alignment=TA_LEFT, spaceAfter=1,
+        fontSize=18, leading=19, textColor=NAVY, alignment=TA_RIGHT, spaceAfter=1,
     ))
     styles.add(ParagraphStyle(
         name="CourseMeta", parent=styles["Normal"], fontName="Helvetica-Bold",
-        fontSize=7.2, leading=9, textColor=BLUE, alignment=TA_LEFT, spaceAfter=1,
+        fontSize=7.2, leading=9, textColor=BLUE, alignment=TA_RIGHT, spaceAfter=1,
+    ))
+    styles.add(ParagraphStyle(
+        name="CourseNote", parent=styles["Normal"], fontName="Helvetica",
+        fontSize=7.5, leading=9, textColor=MUTED, alignment=TA_RIGHT, spaceAfter=1,
     ))
     styles.add(ParagraphStyle(
         name="Team", parent=styles["BodyText"], fontName="Helvetica",
@@ -149,15 +153,16 @@ def build(output: str | Path = "proposal/proposal.pdf") -> None:
     course_block = Table([
         [p("ICS 471", styles["CourseCode"])],
         [p("DEEP LEARNING COURSE PROJECT", styles["CourseMeta"])],
-        [p("Milestone 1  |  proposal and experimental plan", styles["Footer"])],
-    ], colWidths=[3.55 * inch], hAlign="LEFT")
+        [p("Milestone 1  |  proposal and experimental plan", styles["CourseNote"])],
+    ], colWidths=[3.7 * inch], hAlign="RIGHT")
     course_block.setStyle(TableStyle([
+        ("ALIGN", (0, 0), (-1, -1), "RIGHT"),
         ("LEFTPADDING", (0, 0), (-1, -1), 0),
         ("RIGHTPADDING", (0, 0), (-1, -1), 0),
         ("TOPPADDING", (0, 0), (-1, -1), 0),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
     ]))
-    brand_row = Table([[logo, course_block]], colWidths=[3.1 * inch, 3.55 * inch], hAlign="LEFT")
+    brand_row = Table([[logo, course_block]], colWidths=[3.1 * inch, 3.7 * inch], hAlign="LEFT")
     brand_row.setStyle(TableStyle([
         ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
         ("LEFTPADDING", (0, 0), (-1, -1), 0),
@@ -165,7 +170,8 @@ def build(output: str | Path = "proposal/proposal.pdf") -> None:
         ("TOPPADDING", (0, 0), (-1, -1), 0),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
     ]))
-    first_page_gap = lambda: Spacer(1, 12)
+    paragraph_gap = lambda: Spacer(1, 16)
+    section_gap = lambda: Spacer(1, 42)
     story.extend([
         brand_row,
         Spacer(1, 6),
@@ -178,18 +184,18 @@ def build(output: str | Path = "proposal/proposal.pdf") -> None:
             "This project asks whether a small transfer learning model can estimate how technically good a photograph looks to people. The model receives one photograph and predicts a single quality score. It does not need a clean reference image to compare against, so this is called blind or no reference image quality assessment.",
             styles["BodySmall"],
         ),
-        first_page_gap(),
+        paragraph_gap(),
         table([
             ["Task type", "Input", "Output"],
             ["Regression", "One RGB photograph", "One continuous MOS quality score"],
         ], [1.15 * inch, 2.45 * inch, 3.2 * inch], styles),
-        first_page_gap(),
+        section_gap(),
         p("Why this problem matters", styles["Section"]),
         p(
             "Photo upload and media systems often receive images that are out of focus, noisy, poorly exposed, or heavily compressed. A quality estimate could help prioritize images for review, recommend a retake, or rank uploads when no original reference image is available. The project is useful without claiming that a course model would replace human judgment.",
             styles["BodySmall"],
         ),
-        first_page_gap(),
+        section_gap(),
         p("Planned system", styles["Section"]),
         table([
             ["Step", "Simple plan"],
@@ -197,7 +203,7 @@ def build(output: str | Path = "proposal/proposal.pdf") -> None:
             ["2. Predict quality", "Use an ImageNet pretrained ResNet18 with a one value regression head."],
             ["3. Compare with people", "Select the best checkpoint using SROCC on the validation set."],
         ], [1.35 * inch, 5.45 * inch], styles),
-        first_page_gap(),
+        section_gap(),
         p("The goal is a clean applied deep learning experiment, not a new image quality method. The milestone work below is limited to inspecting the data and fixing the evaluation plan before training.", styles["BodySmall"]),
     ])
 
